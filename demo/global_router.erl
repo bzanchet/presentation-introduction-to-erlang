@@ -1,6 +1,6 @@
--module(message_router).
+-module(router).
 
--define(SERVER, message_router).
+-define(SERVER, router).
 
 -compile(export_all).
 
@@ -9,7 +9,7 @@ start() ->
 		 fun() ->
 			 case global:whereis_name(?SERVER) of
 			     undefined ->
-				     Pid = spawn(message_router, route_messages, [dict:new()]),
+				     Pid = spawn(router, route_messages, [dict:new()]),
 				 global:register_name(?SERVER, Pid);
 			        _ ->
 				 ok

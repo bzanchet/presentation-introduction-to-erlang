@@ -1,9 +1,9 @@
--module(message_router).
+-module(local_router).
 
 -compile(export_all).
 
 start() ->
-    spawn(message_router, route_messages, []).
+    spawn(local_router, route_messages, []).
 
 stop(RouterPid) ->
     RouterPid ! shutdown.
