@@ -6,15 +6,15 @@
 
 start() ->
     global:trans({?SERVER, ?SERVER},
-		 fun() ->
-			 case global:whereis_name(?SERVER) of
-			     undefined ->
-				     Pid = spawn(router, route_messages, [dict:new()]),
-				 global:register_name(?SERVER, Pid);
-			        _ ->
-				 ok
-			 end
-		 end).
+    fun() ->
+        case global:whereis_name(?SERVER) of
+            undefined ->
+                Pid = spawn(router, route_messages, [dict:new()]),
+                global:register_name(?SERVER, Pid);
+            _ ->
+                ok
+        end
+    end).
 
 send_chat_message(From, Addressee, MessageBody) ->
     global:send(?SERVER, {dispatch_chat_message, From, Addressee, MessageBody}).
@@ -29,7 +29,9 @@ route_messages(Clients) ->
         		{ok, Pid} ->
         		    Pid ! {receive_message, From, MessageBody};
         		error ->
-        		    io:format("Unknown client ~p~n", ClientName)
+        		    io:format("Unknown client ~p~n", ClientName);
+        		_ ->
+        		    io:format("Ooops ~n", ClientName)
         	    end,
     	    route_messages(Clients);
     	{register_nick, ClientName, Pid} ->
